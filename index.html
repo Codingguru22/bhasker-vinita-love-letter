@@ -109,7 +109,7 @@ async function refreshDashboard(){
  else {el.innerHTML="💌 <strong>No acknowledgement button tap recorded yet.</strong><br>WhatsApp message delivery cannot be verified by this page.";updated.textContent="Last checked: "+new Date().toLocaleTimeString("en-IN",{timeZone:"Asia/Kolkata"})+" IST";}
 }
 document.getElementById("openLetter").addEventListener("click",()=>{showLetter();logLetterOpen();document.getElementById("openLetter").textContent="ख़त खुल गया है ❤️";});
-document.getElementById("playSong").addEventListener("click",()=>{const player=document.getElementById("songPlayer");if(!player.hasChildNodes()){const audio=document.createElement("audio");audio.src="./raabta_assert.mp3";audio.controls=true;audio.preload="metadata";audio.setAttribute("aria-label","Raabta song");player.appendChild(audio);}player.hidden=false;document.getElementById("playSong").textContent="♫  Raabta player";});
+document.getElementById("playSong").addEventListener("click",()=>{const player=document.getElementById("songPlayer");let audio=player.querySelector("audio");if(!audio){audio=document.createElement("audio");audio.src="./raabta_assert.mp3";audio.controls=true;audio.preload="metadata";audio.setAttribute("aria-label","Raabta song");player.appendChild(audio);}player.hidden=false;audio.play().catch(()=>{});document.getElementById("playSong").textContent="♫  Raabta player";});
 document.getElementById("ackButton").addEventListener("click",async()=>{
  const button=document.getElementById("ackButton");button.disabled=true;button.textContent="एक पल… ❤️";
  const whatsappWindow=window.open("about:blank","_blank");

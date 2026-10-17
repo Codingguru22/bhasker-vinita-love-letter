@@ -49,8 +49,10 @@ GitHub remarks
 - Record each project update pushed to GitHub here, including the commit message and files included.
 
 2026-10-17 — Connect local MP3 music player
-- Code change: index.html now loads the project-local raabta_assert.mp3 in a native HTML audio control when the visitor presses Play song. Updated the player styling for the audio control; retained the YouTube link as a fallback.
+- Code change: index.html now loads the project-local raabta_assert.mp3 in a native HTML audio control and attempts playback on a Play song tap. The native controls remain available if browser playback is blocked. Updated the player styling and retained the YouTube link as a fallback.
 - Added file: raabta_assert.mp3 (the MP3 already present in the project folder).
 - GitHub remark: committed index.html, raabta_assert.mp3, and this notes file to main in commit 9cb590f76efa2c95ae477445dcbb389a91eb4fb6 ("Add local Raabta MP3 player"). The commit description records the same file list and change summary.
 - Verification: confirmed the MP3 exists and inspected the updated player source. GitHub shows the commit and uploaded files. Playback was not tested.
-- Follow-up GitHub remark: corrected this entry to record the successful commit; will sync this notes update to GitHub under a separate commit titled Record MP3 update details.
+- Follow-up GitHub remark: the corrected notes entry was synced to GitHub under the separate commit titled Record MP3 update details.
+- Additional code change: the Play song button now calls audio.play() after the visitor tap so playback starts in one tap where the browser permits it.
+- GitHub remark: this playback-start improvement will be synced with the notes under commit summary Make Raabta button start local MP3.
