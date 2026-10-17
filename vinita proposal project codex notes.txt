@@ -1,0 +1,55 @@
+VINITA PROPOSAL PROJECT — CODEX NOTES
+====================================
+
+Purpose
+-------
+Running work log for automation and project changes. Add a dated entry after each future automation task in this project.
+
+Project location
+----------------
+C:\Users\bhask\OneDrive\Desktop\Clear-Desktop-Clutter\Proposal\invitation
+
+Project links and services
+--------------------------
+GitHub repository: https://github.com/Codingguru22/bhasker-vinita-love-letter
+GitHub Pages: https://codingguru22.github.io/bhasker-vinita-love-letter/
+Supabase project ref: dtomvuytdpwpzwitgtsz
+Supabase URL: https://dtomvuytdpwpzwitgtsz.supabase.co
+
+Work completed
+--------------
+
+2026-10-17 — Supabase letter-open and acknowledgement tracking
+- Updated index.html so opening the letter records a new row in public.love_letter_open_events.
+- The page discloses that opening the letter records a timestamp and that location is saved only with browser permission.
+- The event stores the open time, and visitor-approved geolocation coordinates/status when available. If permission is denied or location is unavailable, no coordinates are stored.
+- Added Supabase RPC calls to update location status and to record when the WhatsApp acknowledgement flow opens WhatsApp.
+- The acknowledgement status describes a button tap / WhatsApp opening only. The site cannot verify that a message was sent or delivered.
+- Updated supabase_setup.sql with the event table, row-level security, insert policy, and restricted RPC functions. The migration was applied in the Supabase SQL Editor and returned “Success. No rows returned.”
+- Updated SETUP.md with tracking behavior, a query that displays timestamps in Asia/Kolkata (IST), and the limitation around WhatsApp send verification.
+- Committed index.html, supabase_setup.sql, and SETUP.md to the public GitHub repository. Latest commit message shown in GitHub: “Add consent-based letter visit logging”. The latest Pages deployment was not independently verified in this session.
+
+Earlier project work recorded in available conversation history
+---------------------------------------------------------------
+- Prepared the love-letter project for local IDE use; project files include index.html, README.md, SETUP.md, and supabase_setup.sql.
+- Configured the proposal page with the WhatsApp contact number +91 2269620214.
+- Set up the Supabase project and SQL schema for acknowledgement data. Supabase credentials/configuration are in the project; never copy secret service-role credentials into client-side code.
+- Published the project repository publicly and configured GitHub Pages. The user explicitly approved public publication of the project and its love-letter text/contact details.
+- Added a “Raabta” song section to the page. The embedded YouTube video was unavailable in the user’s preview, so its embed was changed to another YouTube source with a watch link fallback. A locally hosted MP3 was not added; use a legally obtained audio file if adding one later.
+
+Operational notes
+-----------------
+- For IST display in SQL, use: opened_at AT TIME ZONE 'Asia/Kolkata'.
+- Public visitors can submit tracking events but the event table is not publicly readable; inspect it in Supabase as the project owner.
+- Location collection requires the visitor’s browser permission and may require HTTPS; do not assume coordinates will be present.
+- Update this file after each future automation task performed on this project, recording the date, files/services changed, and any external deployment or database action completed.
+
+GitHub remarks
+---------------
+- Record each project update pushed to GitHub here, including the commit message and files included.
+
+2026-10-17 — Connect local MP3 music player
+- Code change: index.html now loads the project-local raabta_assert.mp3 in a native HTML audio control when the visitor presses Play song. Updated the player styling for the audio control; retained the YouTube link as a fallback.
+- Added file: raabta_assert.mp3 (the MP3 already present in the project folder).
+- GitHub remark: pending upload of index.html, raabta_assert.mp3, and this notes file; planned commit message: Add local Raabta MP3 player.
+- Verification: confirmed the MP3 exists and inspected the updated player source. Playback was not tested.
