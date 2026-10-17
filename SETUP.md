@@ -8,7 +8,7 @@
 ## 1) Set up the live status (Supabase)
 1. Create a free project at https://supabase.com/.
 2. In your project, open **SQL Editor → New query**.
-3. Paste the complete contents of `supabase_setup.sql` and click **Run**.
+3. Paste the complete contents of `supabase_setup.sql` and click **Run**. The script is safe to rerun; it adds the visit log and its restricted write functions.
 4. Open **Project Settings → API** (or **Connect**) and copy the Project URL and anon/publishable key.
 5. `index.html` is already configured for the Vinita Proposal Supabase project and the WhatsApp number supplied for this page. If you switch projects or numbers, update `SUPABASE_URL`, `SUPABASE_ANON_KEY`, or `WHATSAPP_NUMBER` there.
 6. Do not put a `service_role` or secret key in the HTML. Only use the public anon/publishable key.
@@ -30,7 +30,29 @@ Bookmark this dashboard URL. It refreshes the acknowledgement status about every
 - She taps **“मैंने तुम्हारा ख़त पढ़ लिया ❤️”**.
 - The page saves the acknowledgement timestamp to Supabase.
 - It opens WhatsApp with a ready-to-send message to your number. She must tap **Send** in WhatsApp; websites cannot silently send a WhatsApp message on her behalf.
-- Your dashboard shows the saved acknowledgement and time.
+- The dashboard records that the acknowledgement button was tapped. The site cannot verify whether WhatsApp actually sent the message.
 
-## Important privacy / reliability note
-This starter uses a public acknowledgement table policy to keep setup simple. It is appropriate only for a low-sensitivity personal status, and it is **not tamper-proof**: someone with the public page could alter the status. The dashboard URL is not an authentication system. For stronger privacy and verified acknowledgements, use a server-side endpoint with authentication and restricted database permissions.
+## 5) Letter opening log and location
+- Each tap on **“तुम्हारे लिए एक ख़त खोलूँ?”** creates one row in `public.love_letter_open_events`.
+- `opened_at` is stored as a timestamp with timezone. To read it in India Standard Time, use the query below.
+- The page discloses location collection before the letter opens. The browser asks for location permission; coordinates are saved only after permission is granted. If permission is denied or unavailable, the event is still recorded with a location status and no coordinates.
+- Public visitors can add events but cannot read the event table. Read it in Supabase **Table Editor → love_letter_open_events** or run this query in SQL Editor:
+
+```sql
+select
+  id,
+  opened_at at time zone 'Asia/Kolkata' as opened_at_ist,
+  location_status,
+  latitude,
+  longitude,
+  location_accuracy_m,
+  case when whatsapp_opened_at is null
+       then 'not opened from this visit'
+       else 'WhatsApp opened; send not verified' end as whatsapp_status,
+  whatsapp_opened_at at time zone 'Asia/Kolkata' as whatsapp_opened_at_ist
+from public.love_letter_open_events
+order by opened_at desc;
+```
+
+## Privacy / reliability
+Visit rows can be submitted from the public page, so they are not proof of a unique human visitor and timestamps can be modified by a technically capable visitor. The event table has no public read policy; its rows should be viewed from the Supabase project owner account. Location is optional and depends on browser permission. WhatsApp link opening is tracked, but sending the message requires the visitor to press **Send** and cannot be confirmed by this static website. The dashboard URL itself is not an authentication system.
