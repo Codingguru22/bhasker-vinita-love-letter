@@ -55,4 +55,4 @@ GitHub remarks
 - Verification: confirmed the MP3 exists and inspected the updated player source. GitHub shows the commit and uploaded files. Playback was not tested.
 - Follow-up GitHub remark: the corrected notes entry was synced to GitHub under the separate commit titled Record MP3 update details.
 - Additional code change: the Play song button now calls audio.play() after the visitor tap so playback starts in one tap where the browser permits it.
-- GitHub remark: this playback-start improvement will be synced with the notes under commit summary Make Raabta button start local MP3.
+- GitHub remark: synced the playback-start code change and this notes entry to main under commit summary Make Raabta button start local MP3.
