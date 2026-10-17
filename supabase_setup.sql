@@ -109,3 +109,24 @@ comment on column public.love_letter_open_events.opened_at is
   'Client-captured letter-open instant, stored as timestamptz; display with AT TIME ZONE Asia/Kolkata for IST.';
 comment on column public.love_letter_open_events.whatsapp_opened_at is
   'Records that the click-to-WhatsApp link was opened. It cannot prove the visitor sent the message.';
+
+-- Supabase stores timestamptz instants in UTC. This owner-only view formats
+-- visit timestamps in IST so they are readable in Table Editor/SQL results.
+create or replace view public.love_letter_open_events_ist
+with (security_invoker = true) as
+select
+  id,
+  letter_id,
+  to_char(opened_at at time zone 'Asia/Kolkata', 'YYYY-MM-DD HH24:MI:SS.MS') || ' IST' as opened_at_ist,
+  location_status,
+  latitude,
+  longitude,
+  location_accuracy_m,
+  case when whatsapp_opened_at is null then null
+       else to_char(whatsapp_opened_at at time zone 'Asia/Kolkata', 'YYYY-MM-DD HH24:MI:SS.MS') || ' IST' end as whatsapp_opened_at_ist,
+  to_char(created_at at time zone 'Asia/Kolkata', 'YYYY-MM-DD HH24:MI:SS.MS') || ' IST' as created_at_ist
+from public.love_letter_open_events;
+
+revoke all on public.love_letter_open_events_ist from anon, authenticated;
+comment on view public.love_letter_open_events_ist is
+  'Owner-only display view. Formats stored timestamptz instants as readable Asia/Kolkata (IST) strings.';

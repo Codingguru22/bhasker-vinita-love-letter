@@ -1,4 +1,4 @@
-VINITA PROPOSAL PROJECT — CODEX NOTES
+﻿VINITA PROPOSAL PROJECT — CODEX NOTES
 ====================================
 
 Purpose
@@ -56,3 +56,32 @@ GitHub remarks
 - Follow-up GitHub remark: the corrected notes entry was synced to GitHub under the separate commit titled Record MP3 update details.
 - Additional code change: the Play song button now calls audio.play() after the visitor tap so playback starts in one tap where the browser permits it.
 - GitHub remark: synced the playback-start code change and this notes entry to main under commit summary Make Raabta button start local MP3.
+
+2026-10-17 — Background music autoplay attempt
+- Code change: index.html now creates the local Raabta audio player as soon as the page script loads, attempts playback automatically, loops the track, and keeps native controls plus a play/pause fallback.
+- Browser behavior: unmuted autoplay can be blocked until a visitor interacts with the page; the UI then asks for one tap to start playback.
+- GitHub remark: published with the subsequent IST and autoplay retry update; see the GitHub remark below.
+- Verification: source updated; actual playback was not verified in a browser.
+
+2026-10-17 — IST timestamp display view
+- Database change: added owner-only public.love_letter_open_events_ist view in supabase_setup.sql; it formats opened_at, created_at, and whatsapp_opened_at as explicit Asia/Kolkata time strings suffixed IST. Original timestamptz values remain unchanged.
+- Documentation change: SETUP.md now explains Supabase UTC display and how to inspect the IST view.
+- Database action: applied successfully in Supabase SQL Editor; the `love_letter_open_events_ist` view is available for IST-formatted display.
+- GitHub remark: published with the subsequent IST and autoplay retry update; see the GitHub remark below.
+
+
+2026-10-17 — Improve music autoplay fallback
+- Code change: index.html still attempts unmuted autoplay on page load, and now retries automatically on the visitor’s first tap/click or keyboard interaction anywhere on the page. The visible button and native audio controls remain available when playback is blocked; the page explains the browser gesture requirement.
+- Browser limitation: browsers can reject unmuted autoplay until the visitor interacts with the page; this cannot be overridden by page code.
+- GitHub remark: published with the subsequent IST and autoplay retry update; see the GitHub remark below.
+- Verification: confirmed the local MP3 file exists and inspected the updated playback handlers; browser audio playback was not verified in this session.
+2026-10-17 — Playback attempt requested
+- Attempt: checked the available browser automation surfaces and local browser test support to launch the page and verify audio playback.
+- Result: no browser session or usable Playwright browser runner is available in this session, so I could not trigger or hear playback here. The project changes and autoplay restriction note are unchanged.
+2026-10-17 — Second playback attempt
+- Action: opened the existing local preview at http://127.0.0.1:3000/index.html in Microsoft Edge.
+- Result: the Edge launch was requested successfully, but this session has no browser UI surface to inspect playback state or confirm audible output. Visitor interaction may still be required by browser autoplay policy.
+
+2026-10-17 — Publish timestamp and music updates
+- GitHub remark: uploading index.html, supabase_setup.sql, SETUP.md, and this notes file to main in commit “Publish IST display and music autoplay retry”.
+- Included changes: owner-only IST display view SQL and guidance; audio autoplay retry on first page interaction; updated project work log.

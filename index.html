@@ -35,7 +35,7 @@ h1{font-size:clamp(2.4rem,7vw,5.5rem);font-weight:400;line-height:1.22;margin:10
 <button class="btn" id="openLetter">तुम्हारे लिए एक ख़त खोलूँ? ♥</button>
 <div class="hint">एक छोटा-सा ख़त · बहुत सारा प्यार</div>
 <div class="hint" style="max-width:480px;margin-inline:auto">Opening the letter records the time in IST. Your location is saved only if you allow browser location access.</div>
-<div class="song-card"><p>A little music for this letter · Raabta by Arijit Singh</p><button type="button" id="playSong">♫ &nbsp; Play song</button><div class="song-player" id="songPlayer" hidden></div><a class="song-fallback" href="https://www.youtube.com/watch?v=HDVw7Y6uAws" target="_blank" rel="noopener noreferrer">If the player does not load, open the song on YouTube</a></div>
+<div class="song-card"><p>A little music for this letter · Raabta by Arijit Singh<br>Music starts automatically when allowed. If blocked, tap anywhere once.</p><button type="button" id="playSong">♫ &nbsp; Start music</button><div class="song-player" id="songPlayer"></div><a class="song-fallback" href="https://www.youtube.com/watch?v=HDVw7Y6uAws" target="_blank" rel="noopener noreferrer">If the player does not load, open the song on YouTube</a></div>
 </div></section>
 <section class="letter-section" id="letterSection"><article class="letter">
 <div class="letter-kicker">मेरे दिल से · सिर्फ़ तुम्हारे नाम</div><h2>मेरी प्यारी विनीता,</h2>
@@ -109,7 +109,24 @@ async function refreshDashboard(){
  else {el.innerHTML="💌 <strong>No acknowledgement button tap recorded yet.</strong><br>WhatsApp message delivery cannot be verified by this page.";updated.textContent="Last checked: "+new Date().toLocaleTimeString("en-IN",{timeZone:"Asia/Kolkata"})+" IST";}
 }
 document.getElementById("openLetter").addEventListener("click",()=>{showLetter();logLetterOpen();document.getElementById("openLetter").textContent="ख़त खुल गया है ❤️";});
-document.getElementById("playSong").addEventListener("click",()=>{const player=document.getElementById("songPlayer");let audio=player.querySelector("audio");if(!audio){audio=document.createElement("audio");audio.src="./raabta_assert.mp3";audio.controls=true;audio.preload="metadata";audio.setAttribute("aria-label","Raabta song");player.appendChild(audio);}player.hidden=false;audio.play().catch(()=>{});document.getElementById("playSong").textContent="♫  Raabta player";});
+const songAudio=document.createElement("audio");
+songAudio.src="./raabta_assert.mp3";
+songAudio.controls=true;
+songAudio.loop=true;
+songAudio.autoplay=true;
+songAudio.preload="auto";
+songAudio.setAttribute("aria-label","Raabta background music");
+document.getElementById("songPlayer").appendChild(songAudio);
+const playSongButton=document.getElementById("playSong");
+songAudio.addEventListener("play",()=>{playSongButton.textContent="♫  Pause music";});
+songAudio.addEventListener("pause",()=>{playSongButton.textContent="♫  Play music";});
+songAudio.addEventListener("error",()=>{playSongButton.textContent="♫  Audio file unavailable";});
+function removeMusicStartListeners(){document.removeEventListener("pointerdown",startMusicOnFirstInteraction,true);document.removeEventListener("keydown",startMusicOnFirstInteraction,true);}
+function startMusicOnFirstInteraction(event){if(event?.target===playSongButton)return;songAudio.play().then(removeMusicStartListeners).catch(()=>{playSongButton.textContent="♫  Tap to start music";});}
+document.addEventListener("pointerdown",startMusicOnFirstInteraction,true);
+document.addEventListener("keydown",startMusicOnFirstInteraction,true);
+playSongButton.addEventListener("click",()=>{if(songAudio.paused)songAudio.play().then(removeMusicStartListeners).catch(()=>{playSongButton.textContent="♫  Tap to start music";});else songAudio.pause();});
+songAudio.play().catch(()=>{playSongButton.textContent="♫  Tap anywhere to start music";});
 document.getElementById("ackButton").addEventListener("click",async()=>{
  const button=document.getElementById("ackButton");button.disabled=true;button.textContent="एक पल… ❤️";
  const whatsappWindow=window.open("about:blank","_blank");

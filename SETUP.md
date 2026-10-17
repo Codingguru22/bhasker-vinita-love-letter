@@ -34,7 +34,7 @@ Bookmark this dashboard URL. It refreshes the acknowledgement status about every
 
 ## 5) Letter opening log and location
 - Each tap on **“तुम्हारे लिए एक ख़त खोलूँ?”** creates one row in `public.love_letter_open_events`.
-- `opened_at` is stored as a timestamp with timezone. To read it in India Standard Time, use the query below.
+- `opened_at` is stored as a timezone-aware instant (Postgres `timestamptz`), which Supabase normalizes and may display in UTC. For an explicit IST display in Table Editor, run the complete `supabase_setup.sql` again to create the owner-only `public.love_letter_open_events_ist` view, then open that view. Its `opened_at_ist`, `created_at_ist`, and `whatsapp_opened_at_ist` columns include the `IST` suffix.
 - The page discloses location collection before the letter opens. The browser asks for location permission; coordinates are saved only after permission is granted. If permission is denied or unavailable, the event is still recorded with a location status and no coordinates.
 - Public visitors can add events but cannot read the event table. Read it in Supabase **Table Editor → love_letter_open_events** or run this query in SQL Editor:
 
@@ -56,3 +56,8 @@ order by opened_at desc;
 
 ## Privacy / reliability
 Visit rows can be submitted from the public page, so they are not proof of a unique human visitor and timestamps can be modified by a technically capable visitor. The event table has no public read policy; its rows should be viewed from the Supabase project owner account. Location is optional and depends on browser permission. WhatsApp link opening is tracked, but sending the message requires the visitor to press **Send** and cannot be confirmed by this static website. The dashboard URL itself is not an authentication system.
+
+
+### Why the base table shows UTC
+
+The base table uses timestamptz so each event represents one unambiguous instant. Supabase may display those values in UTC; the opened_at_ist, created_at_ist, and whatsapp_opened_at_ist columns in love_letter_open_events_ist convert them for display and append IST. The original event data is not shifted or rewritten.
